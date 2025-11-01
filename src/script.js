@@ -49,7 +49,7 @@ gltfLoader.setDRACOLoader(dracoLoader);
 /**
  * Textures
  */
-const bakedTxt = textureLoader.load("baked.jpg");
+const bakedTxt = textureLoader.load("baked_toon.jpg");
 bakedTxt.colorSpace = THREE.SRGBColorSpace;
 bakedTxt.flipY = false; // IMPORTANT¡: the baked image will be flipped if not set to false.
 
@@ -168,14 +168,14 @@ const waterMaterial = new THREE.ShaderMaterial({
   uniforms: {
     uTime: { value: 0 },
 
-    uBigWavesElevation: { value: 0.036 },
-    uBigWavesFrequency: { value: new THREE.Vector2(5.383, 1.98) },
-    uBigWavesSpeed: { value: 0.854 },
+    uBigWavesElevation: { value: 0.15 },
+    uBigWavesFrequency: { value: new THREE.Vector2(0.2, 1.25) },
+    uBigWavesSpeed: { value: 0.8 },
 
-    uSmallWavesElevation: { value: 0.4 },
-    uSmallWavesFrequency: { value: 0.75 },
-    uSmallWavesSpeed: { value: 0.2 },
-    uSmallIterations: { value: 3 },
+    uSmallWavesElevation: { value: 0.1},
+    uSmallWavesFrequency: { value: 1 },
+    uSmallWavesSpeed: { value: 0},
+    uSmallIterations: { value: 1 },
 
     uDepthColor: { value: new THREE.Color(debugObject.depthColor) },
     uSurfaceColor: { value: new THREE.Color(debugObject.surfaceColor) },

@@ -33,6 +33,8 @@ void main()
         0.12
     );
 
+    light.x = 1.0 - step(light.x, 0.9);
+
     color = mix(uDepthColor, color, light.x);
 
     gl_FragColor = vec4(color, 1.0);
