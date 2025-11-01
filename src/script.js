@@ -86,12 +86,18 @@ guiMaterials.add(alphaBakedMaterial.uniforms.uAlpha, "value", 0.001,0.5,0.001).n
 
 gltfLoader.load("./mediterraneanDrive.glb", (gltf) => {
   gltf.scene.traverse((child) => {
-    if (/.*light.*/.test(child.name)) {
-      if(child.name === "car_front_light") child.material = redLightMaterial;
+    const name = child.name;
+    if (/.*light.*/.test(name)) {
+      if(name === "car_front_light") child.material = redLightMaterial;
       else child.material = yellowLightMaterial;
     } else {
-      if (/.*alpha.*/.test(child.name)) child.material = alphaBakedMaterial;
-      else child.material = bakedMaterial;
+      if (/.*alpha.*/.test(name)) child.material = alphaBakedMaterial;
+      else if(name === "Plane001") {
+          child.material = bakedMaterial.clone();
+          child.material.side = THREE.DoubleSide;
+          
+       } 
+        else child.material = bakedMaterial;
     }
   });
 
