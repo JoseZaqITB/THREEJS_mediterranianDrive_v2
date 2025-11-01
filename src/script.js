@@ -62,7 +62,8 @@ moonAlphaTxt.colorSpace = THREE.SRGBColorSpace;
  */
 const bakedMaterial = new THREE.MeshBasicMaterial({ map: bakedTxt });
 
-const poleLightMaterial = new THREE.MeshBasicMaterial({ color: "#ffffe5" });
+const yellowLightMaterial = new THREE.MeshBasicMaterial({ color: "#F3F359" });
+const redLightMaterial = new THREE.MeshBasicMaterial({ color: "#F35959" });
 
 const alphaBakedMaterial = new THREE.ShaderMaterial({
   // CSM
@@ -85,8 +86,8 @@ guiMaterials.add(alphaBakedMaterial.uniforms.uAlpha, "value", 0.001,0.5,0.001).n
 gltfLoader.load("./mediterraneanDrive.glb", (gltf) => {
   gltf.scene.traverse((child) => {
     if (/.*light.*/.test(child.name)) {
-      
-     child.material = poleLightMaterial;
+      if(child.name === "car_front_light") child.material = redLightMaterial;
+      else child.material = yellowLightMaterial;
     } else {
       if (/.*alpha.*/.test(child.name)) child.material = alphaBakedMaterial;
       else child.material = bakedMaterial;
