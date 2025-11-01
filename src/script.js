@@ -70,9 +70,13 @@ const alphaBakedMaterial = new THREE.ShaderMaterial({
   fragmentShader: alphaFragment,
   uniforms:{
     uMap: new THREE.Uniform(bakedTxt),
+    uAlpha: new THREE.Uniform(0.11),
   },
   transparent: true,
 });
+// tweaks
+const guiMaterials = gui.addFolder("Materials");
+guiMaterials.add(alphaBakedMaterial.uniforms.uAlpha, "value", 0.001,0.5,0.001).name("uAlpha");
 
 /**
  * Models
