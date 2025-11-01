@@ -18,7 +18,7 @@ import waterVertexShader from "./shaders/water/water/vertex.glsl";
 const debugObject = {
   depthColor: "#1a1805",
   surfaceColor: "#042c71",
-  colorMoon: "#8b8b8b",
+  colorMoon: "#70a5ff",
   moonPosition: new THREE.Vector2(0.55, 1.0),
 };
 
@@ -26,6 +26,7 @@ const gui = new GUI({
   width: 400,
 });
 
+gui.close()
 // Canvas
 const canvas = document.querySelector("canvas.webgl");
 
@@ -269,13 +270,13 @@ waterTweak
 
 const moonGeometry = new THREE.CircleGeometry(0.75, 32);
 const moonMaterial = new THREE.MeshBasicMaterial({
-  color: "#ffffff",
+  color: debugObject.colorMoon,
   alphaMap: moonAlphaTxt,
   transparent: true,
 });
 
 const moon = new THREE.Mesh(moonGeometry, moonMaterial);
-moon.position.set(4, 5, -30);
+moon.position.set(1, 5, -30);
 
 scene.add(moon);
 
