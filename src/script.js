@@ -2,7 +2,6 @@ import GUI from "lil-gui";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import firefliesVertex from "./shaders/fireflies/vertex.glsl";
 import firefliesFragment from "./shaders/fireflies/fragment.glsl";
 import alphaVertex from "./shaders/alpha/vertex.glsl";
@@ -16,6 +15,8 @@ import waterVertexShader from "./shaders/water/water/vertex.glsl";
 /**
  * Base
  */
+const listener = new THREE.AudioListener();
+
 // Debug
 const debugObject = {
   depthColor: "#1a1805",
@@ -38,16 +39,48 @@ const scene = new THREE.Scene();
 /**
  * Loaders
  */
-// Texture loader
-const textureLoader = new THREE.TextureLoader();
 
-// Draco loader
-const dracoLoader = new DRACOLoader();
-dracoLoader.setDecoderPath("draco/");
+const loadingBarElement = document.querySelector(".loading-bar");
+const startButton = document.querySelector(".button-79");
+startButton.onclick = () => {
+   startButton.style.background = "#ffffff00";
+    startButton.style.color = "#ffffff00";
+    loadingBarElement.style.color = "#ffffff00";
+    loadingBarElement.parentElement.style.background = "#ffffff00";
+    loadingBarElement.style.background = "#ffffff00";
+
+    // start sounds
+	  music.play();
+    ambientSound.play();
+   window.setTimeout(() => {
+       document.body.removeChild(loadingBarElement.parentElement);
+    },2000)
+
+}
+const loadingManager = new THREE.LoadingManager(
+  // loaded
+  () => {
+    startButton.style.background = debugObject.surfaceColor;
+    startButton.style.color = "#adadad";
+
+    loadingBarElement.textContent = "🌴🚗";
+   
+  },
+  // progress
+  (itemUrl, itemLoaded, totalItems) => {
+    const progressRatio = itemLoaded / totalItems;
+    loadingBarElement.style.transform = `translateX(${ progressRatio * sizes.width * 0.5 - sizes.width * 0.25 }px) scale(-1,1)`;
+    console.log(loadingBarElement.style.transform);
+    
+  }
+);
+// Texture loader
+const textureLoader = new THREE.TextureLoader(loadingManager);
 
 // GLTF loader
-const gltfLoader = new GLTFLoader();
-gltfLoader.setDRACOLoader(dracoLoader);
+const gltfLoader = new GLTFLoader(loadingManager);
+
+const audioLoader = new THREE.AudioLoader(loadingManager);
 
 /**
  * Textures
@@ -300,6 +333,26 @@ scene.add(moon);
 
 
 /**
+ * Audio
+ */
+const ambientSound = new THREE.Audio(listener);
+const music = new THREE.Audio(listener);
+
+audioLoader.load("./sounds/144141__alukahn__beach_at_night.mp3",(buffer) => {
+  console.log(buffer);
+  
+  ambientSound.setBuffer( buffer );
+	ambientSound.setLoop( true );
+	ambientSound.setVolume( 0.5 );
+})
+
+audioLoader.load("./sounds/Zambolino_Nighttime_(freetouse.com).mp3",(buffer) => {
+  music.setBuffer( buffer );
+	music.setLoop( false );
+	music.setVolume( 0.2 );
+})
+
+/**
  * Sizes
  */
 const sizes = {
@@ -346,6 +399,8 @@ camera.position.x = 12;
 camera.position.y = 4;
 camera.position.z = 14;
 scene.add(camera);
+// add audio listener
+camera.add(listener);
 
 // Controls
 const controls = new OrbitControls(camera, canvas);
