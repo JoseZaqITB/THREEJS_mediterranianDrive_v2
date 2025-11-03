@@ -70,7 +70,6 @@ const loadingManager = new THREE.LoadingManager(
   (itemUrl, itemLoaded, totalItems) => {
     const progressRatio = itemLoaded / totalItems;
     loadingBarElement.style.transform = `translateX(${ progressRatio * sizes.width * 0.5 - sizes.width * 0.25 }px) scale(-1,1)`;
-    console.log(loadingBarElement.style.transform);
     
   }
 );
@@ -81,6 +80,31 @@ const textureLoader = new THREE.TextureLoader(loadingManager);
 const gltfLoader = new GLTFLoader(loadingManager);
 
 const audioLoader = new THREE.AudioLoader(loadingManager);
+
+
+
+
+/**
+ * Audio
+ */
+const ambientSound = new THREE.PositionalAudio(listener);
+const music = new THREE.Audio(listener);
+
+audioLoader.load("./sounds/144141__alukahn__beach_at_night.mp3",(buffer) => {
+  
+  ambientSound.setBuffer( buffer );
+  ambientSound.setRefDistance(10); // distancia desde donde escuchar
+	ambientSound.setLoop( true );
+	ambientSound.setVolume( 0.8 );
+
+  
+})
+
+audioLoader.load("./sounds/Zambolino_Nighttime_(freetouse.com).mp3",(buffer) => {
+  music.setBuffer( buffer );
+	music.setLoop( false );
+	music.setVolume( 0.1 );
+})
 
 /**
  * Textures
@@ -240,6 +264,7 @@ const waterMaterial = new THREE.ShaderMaterial({
 const water = new THREE.Mesh(waterGeometry, waterMaterial);
 water.rotation.x = -Math.PI * 0.5;
 water.position.z = -18;
+water.add(ambientSound);
 scene.add(water);
 
 // debug
@@ -330,27 +355,6 @@ const moon = new THREE.Mesh(moonGeometry, moonMaterial);
 moon.position.set(1, 5, -30);
 
 scene.add(moon);
-
-
-/**
- * Audio
- */
-const ambientSound = new THREE.Audio(listener);
-const music = new THREE.Audio(listener);
-
-audioLoader.load("./sounds/144141__alukahn__beach_at_night.mp3",(buffer) => {
-  console.log(buffer);
-  
-  ambientSound.setBuffer( buffer );
-	ambientSound.setLoop( true );
-	ambientSound.setVolume( 0.5 );
-})
-
-audioLoader.load("./sounds/Zambolino_Nighttime_(freetouse.com).mp3",(buffer) => {
-  music.setBuffer( buffer );
-	music.setLoop( false );
-	music.setVolume( 0.2 );
-})
 
 /**
  * Sizes
