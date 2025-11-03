@@ -7,6 +7,8 @@ import firefliesVertex from "./shaders/fireflies/vertex.glsl";
 import firefliesFragment from "./shaders/fireflies/fragment.glsl";
 import alphaVertex from "./shaders/alpha/vertex.glsl";
 import alphaFragment from "./shaders/alpha/fragment.glsl";
+import leafVertex from "./shaders/leaf/vertex.glsl";
+import leafFragment from "./shaders/leaf/fragment.glsl";
 import waterFragmentShader from "./shaders/water/water/fragment.glsl";
 import waterVertexShader from "./shaders/water/water/vertex.glsl";
 
@@ -62,6 +64,18 @@ moonAlphaTxt.colorSpace = THREE.SRGBColorSpace;
  * Materials
  */
 const bakedMaterial = new THREE.MeshBasicMaterial({ map: bakedTxt });
+const leafBakedMaterial = new THREE.ShaderMaterial({
+  // CSM
+  vertexShader: leafVertex,
+  fragmentShader: leafFragment,
+  uniforms:{
+    uMap: new THREE.Uniform(bakedTxt),
+    uTime: new THREE.Uniform(0),
+    uWindSpeed: new THREE.Uniform(1.5),
+    uWindElevation: new THREE.Uniform(0.6),
+  },
+  side: THREE.DoubleSide,
+});
 
 const yellowLightMaterial = new THREE.MeshBasicMaterial({ color: "#F3F359" });
 const redLightMaterial = new THREE.MeshBasicMaterial({ color: "#F35959" });
@@ -79,6 +93,8 @@ const alphaBakedMaterial = new THREE.ShaderMaterial({
 // tweaks
 const guiMaterials = gui.addFolder("Materials");
 guiMaterials.add(alphaBakedMaterial.uniforms.uAlpha, "value", 0.001,0.5,0.001).name("uAlpha");
+guiMaterials.add(leafBakedMaterial.uniforms.uWindSpeed,"value",0.1, 10, 0.1).name("uWindSpeed");
+guiMaterials.add(leafBakedMaterial.uniforms.uWindElevation,"value",0.1, 3, 0.01).name("uWindElevation");
 
 /**
  * Models
@@ -92,11 +108,7 @@ gltfLoader.load("./mediterraneanDrive.glb", (gltf) => {
       else child.material = yellowLightMaterial;
     } else {
       if (/.*alpha.*/.test(name)) child.material = alphaBakedMaterial;
-      else if(name === "Plane001") {
-          child.material = bakedMaterial.clone();
-          child.material.side = THREE.DoubleSide;
-          
-       } 
+      else if(name === "Plane001") child.material = leafBakedMaterial;
         else child.material = bakedMaterial;
     }
   });
@@ -366,6 +378,9 @@ const tick = () => {
   // update materials
   fireFliesMaterial.uniforms.uTime.value = elapsedTime;
   waterMaterial.uniforms.uTime.value = elapsedTime;
+  leafBakedMaterial.uniforms.uTime.value = elapsedTime;
+
+
   // Render
   renderer.render(scene, camera);
 
