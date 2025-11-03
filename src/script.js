@@ -23,6 +23,8 @@ const debugObject = {
   surfaceColor: "#042c71",
   colorMoon: "#70a5ff",
   moonPosition: new THREE.Vector2(0.55, 1.0),
+  ambientVolume: 0.8,
+  musicVolume: 0.1,
 };
 
 const gui = new GUI({
@@ -105,6 +107,11 @@ audioLoader.load("./sounds/Zambolino_Nighttime_(freetouse.com).mp3",(buffer) => 
 	music.setLoop( false );
 	music.setVolume( 0.1 );
 })
+
+// tweaks
+const guiAudio = gui.addFolder("Audio");
+guiAudio.add(debugObject,"ambientVolume", 0.1, 1.0, 0.1).onChange(() => ambientSound.setVolume(debugObject.ambientVolume));
+guiAudio.add(debugObject,"musicVolume", 0.1, 1.0, 0.1).onChange(() => music.setVolume(debugObject.musicVolume));
 
 /**
  * Textures
