@@ -50,7 +50,7 @@ gltfLoader.setDRACOLoader(dracoLoader);
 /**
  * Textures
  */
-const bakedTxt = textureLoader.load("baked_v2.jpg");
+const bakedTxt = textureLoader.load("baked_v2_subdivision.jpg");
 bakedTxt.colorSpace = THREE.SRGBColorSpace;
 bakedTxt.flipY = false; // IMPORTANT¡: the baked image will be flipped if not set to false.
 
