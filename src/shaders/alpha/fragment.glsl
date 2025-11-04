@@ -8,7 +8,8 @@ varying vec2 vUv;
 
 void main() {
     // create alpha
-    float alpha = 1.0 - distance(vGlobalPosition * uAlpha, vec2(0.0));
+    float alpha =distance(vGlobalPosition * uAlpha, vec2(0.0));
+    alpha = 1.0 - pow(alpha, 10.0);
     // apply map texture
     vec3 map = texture(uMap, vUv).rgb;
     // final color
