@@ -26,6 +26,7 @@ body {
   text-align: center;
   transition:  background-color 2s;
   will-change: background-color;
+  overflow: hidden;
 
 }
 .loading-bar {

@@ -27,10 +27,7 @@ const debugObject = {
   musicVolume: 0.1,
 };
 
-const gui = new GUI({
-  width: 400,
-});
-
+const gui = new GUI();
 gui.close()
 // Canvas
 const canvas = document.querySelector("canvas.webgl");
